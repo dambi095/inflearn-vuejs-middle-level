@@ -1,89 +1,83 @@
 <template>
   <div>
-      <ul>
-        <li v-for='(todoItem, index) in todoItems' :key='todoItem.item' class='shadow'>
-            <i class='fas fa-check checkBtn' @click='toggleComplete(todoItem)' 
-                :class='{checkBtnCompleted: todoItem.completed}'>
-            </i>
-            <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-            <span class='removeBtn' @click='removeTodo(todoItem, index)'>
-                <i class='fas fa-trash-alt'></i>
-            </span>
-        </li>
-      </ul>
+    <transition-group name="list" tag="ul">
+      <li v-for="(todoItem, index) in propsdata" :key="todoItem.item" class="shadow">
+        <i
+          class="fas fa-check checkBtn"
+          @click="toggleComplete(todoItem, index)"
+          :class="{checkBtnCompleted: todoItem.completed}"
+        />
+        <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+        <span class="removeBtn" @click="removeTodo(todoItem, index)">
+          <i class="fas fa-trash-alt" />
+        </span>
+      </li>
+    </transition-group>
   </div>
 </template>
 
 <script>
 export default {
-    data: function() {
-        return {
-            todoItems: []
-        }
+  props: ["propsdata"],
+  methods: {
+    removeTodo: function(todoItem, index) {
+      this.$emit("removeItem", todoItem, index);
     },
-    methods: {
-        removeTodo: function(todoItem, index) {
-            console.log(todoItem, index);
-            localStorage.removeItem(todoItem);
-            // JS의 배열 API! 특정인덱스에서 하나 지우고 새로운 배열을 반환..
-            this.todoItems.splice(index, 1);
-        },
-        toggleComplete: function(todoItem) {
-            todoItem.completed = !todoItem.completed;
-            localStorage.removeItem(todoItem.item);
-            localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-        }
-    },
-    // 인스턴스가 생성되자마자 호출되는 lifeCycle
-    created: function() {
-        if(localStorage.length > 0){
-            for(let i=0; i < localStorage.length; i++){
-                // console.log(localStorage.key(i));
-                if(localStorage.key(i) !== 'loglevel:webpack-dev-server'){
-                 this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));   
-                }
-            }
-        }
+    toggleComplete: function(todoItem, index) {
+      this.$emit("toggleItem", todoItem, index);
     }
-}
+  }
+};
 </script>
 
 <style scoped>
 ul {
-    list-style-type: none;
-    padding-left: 0px;
-    margin-top: 0;
-    text-align: left;
+  list-style-type: none;
+  padding-left: 0px;
+  margin-top: 0;
+  text-align: left;
 }
 
 li {
-    display: flex;
-    min-height: 50px;
-    height: 50px;
-    line-height: 50px;
-    margin: 0.5rem 0;
-    padding: 0 0.9rem;
-    background: white;
-    border-radius: 5px;
+  display: flex;
+  min-height: 50px;
+  height: 50px;
+  line-height: 50px;
+  margin: 0.5rem 0;
+  padding: 0 0.9rem;
+  background: white;
+  border-radius: 5px;
 }
 
 .removeBtn {
-    margin-left: auto;
-    color: #de4343;
+  margin-left: auto;
+  color: #de4343;
 }
 
 .checkBtn {
-    line-height: 45px;
-    color: #62acde;
-    margin-right: 5px;
+  line-height: 45px;
+  color: #62acde;
+  margin-right: 5px;
 }
 
 .checkBtnCompleted {
-    color: #b3adad;
+  color: #b3adad;
 }
 
 .textCompleted {
-    text-decoration: line-through;
-    color: #b3adad;
+  text-decoration: line-through;
+  color: #b3adad;
+}
+
+/* 리스트 아이템 애니메이션 효과 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

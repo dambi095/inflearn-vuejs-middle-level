@@ -1,24 +1,10 @@
 # vue-todo
 
-## Project setup
+####
 ```
-npm install
+1. vue cli 를 이용한 프로젝트 구성방법을 배워보자!
+2. 컴포넌트 기반 설계 방법을 배워보자!
+3. 컴포넌트 구조화 및 컴포넌트 통신 방법을 배워보자!
+4. ES6를 이용한 효율적이고 간결한 뷰 코딩방법을 배워보자!
+5. Vuex를 이용한 상태 관리의 이해 및 적용방법을 배워보자!
 ```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
