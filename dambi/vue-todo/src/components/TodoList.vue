@@ -1,14 +1,12 @@
 <template>
   <div>
     <transition-group name="list" tag="ul">
-      <li v-for="(todoItem, index) in propsdata" :key="todoItem.item" class="shadow">
-        <i
-          class="fas fa-check checkBtn"
-          @click="toggleComplete(todoItem, index)"
+      <li v-for="(todoItem, index) in storedTodoItems" :key="todoItem.item" class="shadow">
+        <i class="fas fa-check checkBtn" @click="toggleComplete({todoItem, index})"
           :class="{checkBtnCompleted: todoItem.completed}"
         />
         <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-        <span class="removeBtn" @click="removeTodo(todoItem, index)">
+        <span class="removeBtn" @click="removeTodo({todoItem, index})">
           <i class="fas fa-trash-alt" />
         </span>
       </li>
@@ -17,15 +15,20 @@
 </template>
 
 <script>
+// 헬퍼함수
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
-  props: ["propsdata"],
   methods: {
-    removeTodo: function(todoItem, index) {
-      this.$emit("removeItem", todoItem, index);
-    },
-    toggleComplete: function(todoItem, index) {
-      this.$emit("toggleItem", todoItem, index);
-    }
+    // 암묵적으로 인자들을 사용시 같이 넘기구있당
+    ...mapMutations({
+      // removeTodo 가 클릭되면 removeOneItem 실행
+      removeTodo: 'removeOneItem',
+      toggleComplete: 'toggleOneItem'
+    }),
+  }, 
+  computed: {
+    ...mapGetters(['storedTodoItems'])
   }
 };
 </script>

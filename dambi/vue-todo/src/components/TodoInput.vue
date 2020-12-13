@@ -1,6 +1,6 @@
 <template>
   <div class='inputBox shadow'>
-    <input type='text' v-model='newTodoItem'  @keyup.enter='addTodo'/>
+    <input type='text' v-model='newTodoItem'  @keypress.enter='addTodo'/>
     <span class='addContainer' @click='addTodo'>
       <i class="far fa-plus addBtn"/>
     </span>
@@ -20,29 +20,31 @@
 import Modal from'./common/Modal.vue'
 
 export default {
-  data: function() {
+  data() {
     return {
       newTodoItem: '',
       showModal: false
     };
   },
   methods: {
-    addTodo: function() {
+    addTodo() {
       if (this.newTodoItem !== '') {
         // 여기서의 this 는 TodoInput 컴포넌트를 지칭하기 때문에 데이터 접근이 가능하다.
-        this.$emit('addTodoItem', this.newTodoItem);
-        this.clearInput();
+        // this.$emit('addTodoItem', this.newTodoItem);
+       const text = this.newTodoItem.trim();
+       this.$store.commit('addOneItem', text); //mutation 동작~
+       this.clearInput();
       } else {
         this.showModal = !this.showModal;
       }
     },
-    clearInput: function() {
+    clearInput() {
       this.newTodoItem = '';
     }
   }, 
   components: {
     // TodoInput 컴포넌트의의 하위 컴포넌트들
-    Modal: Modal
+    Modal
   }
 };
 </script>
